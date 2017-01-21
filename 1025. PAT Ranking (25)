@@ -1,0 +1,56 @@
+#include <cstdio>
+#include <algorithm>
+#include <string.h>
+
+using namespace std;
+
+struct testee{
+    char regnum[13];//registration number
+    int score;
+    int locnum;//location number
+    int finalrank;
+    int localrank;
+}stu[30000];
+
+bool cmp(testee a, testee b){
+    if(a.score != b.score)return a.score > b.score;
+    else
+        return strcmp(a.regnum, b.regnum) < 0;
+}
+int main(){
+    int i, j, g = 0;
+    int n;//the number of test locations
+    int k[100];//the number of testees in each location
+    int temp = 0;//the total number of testees whose location number smaller than current one
+    scanf("%d", &n);
+    for(i = 0; i < n; i++){
+        scanf("%d", &k[i]);
+        for(j = 0;j < k[i]; j++){
+            scanf("%s %d", stu[g].regnum, &stu[g].score);
+            stu[g++].locnum = i + 1;
+        }
+        sort(stu + temp, stu + temp + k[i], cmp);//sort the local testees
+        stu[temp].localrank = 1;
+        for(j = 1; j < k[i]; j++){//make the local rank list
+            if(stu[temp + j].score == stu[temp + j - 1].score){
+                stu[temp + j].localrank = stu[temp + j - 1].localrank;
+            }else
+                stu[temp + j].localrank = j + 1;
+        }
+        temp += k[i];
+    }
+    
+    printf("%d\n",g);
+    
+    sort(stu, stu + g, cmp);//sort all testees
+    stu[0].finalrank = 1;
+    printf("%s %d %d %d\n", stu[0].regnum, stu[0].finalrank, stu[0].locnum, stu[0].localrank);
+    for(j = 1; j < g; j++){//make the final rank list
+        if(stu[j].score == stu[j - 1].score){
+            stu[j].finalrank = stu[j - 1].finalrank;
+        }else
+            stu[j].finalrank = j + 1;
+        printf("%s %d %d %d\n", stu[j].regnum, stu[j].finalrank, stu[j].locnum, stu[j].localrank);
+    }
+    return 0;
+}

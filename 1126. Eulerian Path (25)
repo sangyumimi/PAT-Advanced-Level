@@ -1,0 +1,75 @@
+#include <cstdio>
+
+const int maxn = 10000;
+int father[maxn];
+
+int findfather(int x){//查找根节点
+    int i = x;
+    while (father[x] != x) {
+        x = father[x];
+    }
+    while (i != father[i]) {//路经压缩
+        int z = i;
+        i = father[i];
+        father[z] = x;
+    }
+    return x;
+}
+
+void Union(int a, int b){//合并元素
+    if (findfather(a) != findfather(b)){
+        father[findfather(a)] = findfather(b);
+    }
+}
+
+int main(){
+    int n, m;
+    int start, end;
+    int degree[maxn] = {0};//节点的度
+    int odd = 0;
+    int flag = 1;//1表示连通，0表示非连通
+    
+    scanf("%d %d",&n, &m);
+    
+    for (int i = 1; i <= n; i++) {//并查集初始化
+        father[i] = i;
+    }
+    
+    for (int i = 0; i < m; i++) {
+        scanf("%d %d", &start, &end);
+        degree[start]++;
+        degree[end]++;
+        Union(start, end);
+    }
+    
+    int onlyfather = findfather(1);
+    
+    for (int i = 1; i <= n; i++) {
+        if (degree[i] % 2 == 1) {
+            odd++;
+        }
+        if (flag && findfather(i) != onlyfather) {
+            flag = 0;
+        }
+    }
+    
+    for (int i = 1; i <= n; i++) {
+        if(i != n){
+            printf("%d ",degree[i]);
+        }else{
+            printf("%d\n",degree[i]);
+        }
+    }
+    
+    if (!flag) {//非连通图为Non-Eulerian
+        printf("Non-Eulerian\n");
+    }else if (odd == 2) {
+        printf("Semi-Eulerian\n");
+    }else if (odd == 0){
+        printf("Eulerian\n");
+    }else {
+        printf("Non-Eulerian\n");
+    }
+    
+    return 0;
+}

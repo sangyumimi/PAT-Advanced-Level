@@ -1,0 +1,41 @@
+#include <cstdio>
+#define maxn 55
+
+int n;
+int input[maxn];
+char ini[maxn];
+char ter[maxn];
+
+char color[] = {'S','H','C','D','J'};
+
+void shuffling(){
+    for (int i = 1; i < maxn; i++) {
+        ter[input[i]] = ini[i];
+    }
+    for (int i = 1; i < maxn; i++) {
+        ini[i] = ter[i];
+    }
+}
+int main(){
+    for (int i = 0; i < maxn; i++) {
+        ini[i] = i;
+    }
+    
+    scanf("%d",&n);
+    
+    for (int i = 1; i < maxn; i++) {
+        scanf("%d",&input[i]);
+    }
+    
+    while (n > 0) {
+        shuffling();
+        n--;
+    }
+    
+    for (int i = 1; i < maxn; i++) {
+        if(i != maxn - 1)printf("%c%d ",color[(ini[i] - 1) / 13], (ini[i] - 1) % 13 + 1);
+        else printf("%c%d\n",color[(ini[i] - 1) / 13], (ini[i] - 1) % 13 + 1);
+    }
+    return 0;
+}
+

@@ -1,0 +1,35 @@
+#include <cstdio>
+
+int main(){
+    int k;
+    int n;
+    int num[2010];
+    int output[210] = {0};
+    scanf("%d",&k);
+    
+    for (int i = 0; i < k; i++) {
+        scanf("%d",&n);
+        for (int j = 0; j < n; j++) {
+            scanf("%d",&num[j]);
+        }
+        for (int j = 0; j < n; j++) {
+            for (int k = j + 1; k < n; k++) {
+                int temp1 = num[j] + j;
+                int temp2 = num[j] - j;
+                if (num[j] == num[k] || num[k] + k == temp1 || num[k] - k == temp2) {
+                    output[i] = 1;
+                    break;
+                }
+            }
+        }
+    }
+    
+    for (int i = 0; i < k; i++) {
+        if (output[i]) {
+            printf("NO\n");
+        } else {
+            printf("YES\n");
+        }
+    }
+    return 0;
+}
